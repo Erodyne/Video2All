@@ -1,0 +1,58 @@
+name: Release
+
+# Avvio manuale (Actions › Release › Run workflow, oppure gh workflow run):
+#  - versione = 6.1.0      -> compila Video2All.exe, crea l'installer e pubblica la release v6.1.0
+#  - versione + firma      -> allega Video2All-Setup.exe.sig (Base64) alla release esistente
+on:
+  workflow_dispatch:
+    inputs:
+      versione: { description: 'Versione (es. 6.1.0)', required: true }
+      firma: { description: 'Firma Erodyne Base64 (solo per allegarla)', required: false, default: '' }
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      VER: ${{ inputs.versione }}
+      FIRMA: ${{ inputs.firma }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Allega la firma
+        if: inputs.firma != ''
+        shell: pwsh
+        run: |
+          if ($env:FIRMA -notmatch '^[A-Za-z0-9+/=]+$') { throw 'firma non valida' }
+          Set-Content Video2All-Setup.exe.sig $env:FIRMA -Encoding ascii -NoNewline
+          gh release upload "v$env:VER" Video2All-Setup.exe.sig --clobber
+      - name: Compila Video2All.exe
+        if: inputs.firma == ''
+        shell: pwsh
+        run: |
+          if ($env:VER -notmatch '^\d+(\.\d+)*$') { throw 'versione non valida' }
+          $csc = "$env:WINDIR\Microsoft.NET\Framework64\v4.0.30319\csc.exe"
+          & $csc /nologo /target:winexe /optimize+ /out:Video2All.exe /win32icon:sorgenti\app.ico `
+            /r:System.Windows.Forms.dll /r:System.Drawing.dll /r:System.Core.dll /r:System.Security.dll sorgenti\*.cs
+          if (-not (Test-Path Video2All.exe)) { throw 'Compilazione non riuscita' }
+      - name: FFmpeg
+        if: inputs.firma == ''
+        shell: pwsh
+        run: |
+          Invoke-WebRequest https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip -OutFile ff.zip
+          Expand-Archive ff.zip ff
+          Copy-Item (Get-ChildItem ff -Recurse -Filter ffmpeg.exe | Select-Object -First 1).FullName .\ffmpeg.exe
+          .\ffmpeg.exe -hide_banner -version | Select-Object -First 1
+      - name: Installer e release
+        if: inputs.firma == ''
+        shell: pwsh
+        run: |
+          choco install innosetup -y --no-progress | Out-Null
+          & "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" /Q installazione\Setup.iss
+          if (-not (Test-Path Video2All-Setup.exe)) { throw 'Installer non creato' }
+          $h = (Get-FileHash Video2All-Setup.exe -Algorithm SHA256).Hash.ToLower()
+          "$h  Video2All-Setup.exe" | Set-Content Video2All-Setup.exe.sha256 -Encoding ascii
+          "SHA256 $h"
+          gh release create "v$env:VER" Video2All-Setup.exe Video2All-Setup.exe.sha256 --target ${{ github.sha }} --title "Video2All $env:VER" --notes-file LEGGIMI.txt
