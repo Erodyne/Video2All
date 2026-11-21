@@ -1,0 +1,35 @@
+VIDEO2ALL 6.1
+Avvio: "Avvia Video2All.bat" oppure Video2All.exe  (se l'antivirus blocca: "Avvia (alternativo).bat")
+Installazione (facoltativa, senza permessi di amministratore): "Installa.bat"
+  -> menu Start, desktop e voce in "App installate" (disinstallazione da lì).
+  In "installazione\Setup.iss" c'è anche un installer classico da compilare con Inno Setup.
+
+NOVITÀ 6.1
+- 170 correzioni (elenco completo in CORREZIONI.txt), tra cui: ingressi del grabber non collegabili
+  (errore "Unable to route"), audio 24 bit + filtri, lavori sui file in coda a bassa priorità,
+  Live che resta aperto durante i messaggi, cartelle di rete senza blocchi, ora legale.
+
+NOVITÀ 6
+- Finestre di messaggio nel tema del programma (Ctrl+C copia il testo).
+- Tasti personalizzabili: Opzioni > Tasti (locali e globali, controllo dei doppioni).
+- Audio a 24 bit per WAV, FLAC e archivio (pagina Audio); se il dispositivo non lo supporta torna a 16 bit da solo.
+- Microfono e grabber: compensazione della deriva tra i due orologi.
+- Anteprima: "Bassa latenza" (per giocare) oppure "Audio e video sincronizzati" (per VHS/film).
+- Misura latenza (pagina Immagine > Anteprima).
+- Live disegnato dalla scheda grafica (OpenGL); se ci sono problemi si torna da soli al disegno normale.
+- Taglio intelligente: preciso al fotogramma, ricodifica solo l'inizio e la fine (file H.264).
+- Aggiornamento del programma da un indirizzo scelto da te (Opzioni > Aggiornamenti del programma),
+  installato solo se l'impronta SHA-256 coincide. Esempio in "installazione\aggiornamento-esempio.txt".
+- Sorgenti riorganizzati per argomento.
+
+INTERFACCIA
+- Barra a sinistra: pagine delle impostazioni (clic di nuovo per chiuderle). Ctrl+K cerca qualsiasi impostazione.
+- In alto: stato (segnale, REC, diretta, fps, CPU, disco), mini-finestra, tema chiaro/scuro.
+- A destra: libreria con ricerca; tasto destro o "Strumenti" per tagliare, unire, esportare, normalizzare,
+  stabilizzare, restaurare VHS, clip dai marcatori, provini, rinominare.
+
+TASTI PREDEFINITI (modificabili)
+F3 nuovo file - F4 pausa - F5/F6 timer - F7 replay - F8 marcatore - F9 registra - F10 stop - F11 Live - F12 foto
+Globali: Ctrl+Alt + R S L P B M T Y A, 1-5 per le scene
+
+Log e impostazioni: %APPDATA%\Video2All

@@ -1,0 +1,7 @@
+# Esempio di file di aggiornamento da pubblicare su un indirizzo https (es. GitHub, Google Drive con link diretto, sito).
+# Nel programma: Opzioni › Aggiornamenti del programma › incolla l'indirizzo di QUESTO file.
+# L'impronta si calcola in PowerShell con:  (Get-FileHash .\Video2All.exe -Algorithm SHA256).Hash
+version=6.0.1
+url=https://esempio.it/Video2All.exe
+sha256=0000000000000000000000000000000000000000000000000000000000000000
+notes=Correzioni varie

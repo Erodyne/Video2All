@@ -1,0 +1,176 @@
+Video2All (già Acquisizione Video)
+ACQUISIZIONE VIDEO 6.1 - CORREZIONI
+
+PRIMO GIRO (100)
+1 Crossbar: elencati ingressi non collegabili (Tuner/Unknown/non compatibili) -> errore "Unable to route pin 3"
+2 Crossbar: ingresso audio collegato poteva essere un pin non audio
+3 Ritaglio: con valori alti la zona usciva dall'immagine (errore ffmpeg)
+4 Salvataggio replay bloccava la cattura per tutta la scrittura (fino a 600 MB)
+5 Replay/pre-registrazione basati sull'ora del PC: cambio ora legale/sincronizzazione svuotava o gonfiava il buffer
+6 Capitoli: titoli con \ o # rompevano il file dei capitoli
+7 Miniature: restava quella vecchia se la nuova falliva
+8 Impostazioni scritte da più thread insieme (possibile corruzione/crash)
+9 Caricando un profilo si sovrascriveva la chiave della seconda diretta
+10 MOV con audio Opus o FLAC: registrazione impossibile (ffmpeg rifiuta)
+11 Profilo baseline + interlacciato: errore dell'encoder
+12 Metadati con \ finale (es. percorso nel commento) rompevano la riga di comando
+13 Titoli delle tracce audio sempre in italiano anche con interfaccia in inglese
+14 Strumenti di misura: immagine interna non liberata alla chiusura (perdita memoria)
+15 Live GPU: righe "scanline" calcolate sempre per PAL anche con NTSC
+16 Misura latenza: falsa misura se l'angolo dell'immagine era già magenta
+17 Passando da "sincronizzato" a "bassa latenza" comparivano fotogrammi vecchi
+18 Salvataggio replay: l'interfaccia si bloccava durante la scrittura e un disco pieno causava un errore imprevisto
+19 Diretta SRT: passphrase/streamid finivano in chiaro nel log
+20 Diretta: la chiave compariva nei messaggi d'errore a schermo e nel log quando ffmpeg falliva
+21 Copia d'archivio: possibile pacchetto perso/doppio tra pre-registrazione e avvio (file con difetto all'inizio)
+22 Nome file con "%" rompeva la divisione in parti
+23 Se si fermava solo la copia d'archivio compariva "Registrazione interrotta" anche se la registrazione continuava
+24 Webcam in sovrimpressione ignorata se le liste avevano ordine diverso (confronto per posizione invece che per nome)
+25 Proporzioni "nessuna correzione" calcolate sempre su 720 pixel anche con altre larghezze
+26 Se la cattura si fermava da sola, la seconda diretta restava appesa
+27 Se la cattura si fermava da sola, il thread dei comandi dal vivo restava bloccato per sempre
+28 Se la cattura si fermava da sola, il thread di presentazione dei fotogrammi restava attivo
+29 Live aperto durante una registrazione: lo schermo poteva spegnersi (blocco del salvaschermo non aggiornato)
+30 Avviso "dati persi" della nuova registrazione non compariva se la precedente ne aveva persi di più
+31 Diretta: i dati persi per connessione lenta non venivano segnalati
+32 Rapporto di registrazione letto dai controlli da un thread in background (possibile crash o dati sbagliati)
+33 Durata nel rapporto, REC e marcatori sbagliati oltre le 24 ore (ripartiva da 00)
+34 Durante la pausa il contatore REC continuava a salire e poi saltava indietro
+35 Metadati modificati dalla libreria con \ finale rompevano il comando
+36 Unione file: nel ripiego in MP4 poteva sovrascrivere un file esistente con lo stesso nome
+37 Normalizza audio: falliva con video FFV1/HuffYUV/UT (copiati in MP4 non compatibile)
+38 'Ferma dopo N minuti' contava anche il tempo in pausa
+39 Le preimpostazioni (PS1, VHS...) forzavano sempre lo standard PAL anche per chi usa NTSC
+40 Anteprima automatica all'avvio partiva mentre il programma leggeva i formati del grabber: due accessi insieme davano 'I/O error'
+41 Prova automatica: se funzionava solo un ingresso preciso, quell'ingresso non veniva selezionato
+42 Analisi del segnale: se non trovava segnale l'anteprima restava spenta
+43 Taglia/Esporta/Comprimi/Clip rifiutavano i video MOV, AVI e TS registrati dal programma stesso
+44 Taglio preciso falliva con file che avevano tracce extra (sottotitoli/dati)
+45 Finestra Taglia: caselle bianche su fondo scuro (tema applicato prima di aggiungere i controlli)
+46 Finestre Esporta e Clip/GIF senza tema (bianche)
+47 Pulsanti standard nelle finestre secondarie bianchi nel tema scuro
+48 Miniature duplicate in memoria aggiornando l'elenco più volte
+49 Un lavoro in background senza esito poteva causare un errore imprevisto
+50 Conversione automatica MKV->MP4 saltata senza motivo con audio PCM/FLAC/Opus e con H.264 senza perdita
+51 Dispositivo USB collegato durante l'anteprima: l'elenco non si aggiornava più nemmeno dopo averla chiusa
+52 Dopo 'Ripristina tasti predefiniti' le modifiche ai tasti non avevano più effetto
+53 Barra laterale: nomi lunghi tagliati ("Acquisizi…", "Automazi…")
+54 Taglio intelligente: con alcuni file interlacciati usava la frequenza doppia e poteva duplicare un pezzo
+55 Solo microfono senza audio del grabber: registrazione video, audio e archivio fallivano (traccia audio sbagliata)
+56 Avviando la registrazione senza perdita durante una diretta, la cattura si riavviava e la diretta cadeva
+57 Logo scelto con "..." non applicato finché non si cliccava altrove (e restava spento)
+58 Riaprendo dall'area di notifica la finestra ingrandita tornava piccola
+59 Riaprendo dall'area di notifica spariva l'icona anche con le notifiche attive
+60 Domande (es. analisi segnale) aperte con il Live a schermo intero finivano dietro e il programma sembrava bloccato
+61 Aggiornamento del programma: chiudeva senza avviso anche con tagli/esportazioni in corso, interrompendoli
+62 Audio a 24 bit insieme a normalizzazione/riduzione rumore: l'anteprima si interrompeva subito (blocchi audio troppo grandi)
+63 AV1 nel contenitore MOV: registrazione impossibile
+64 Esporta "Converti in MP4" falliva con i file d'archivio FFV1/UT/HuffYUV (ora ricodifica in alta qualità)
+65 Unisci file: con codec diversi la copia diretta 'riusciva' ma creava un file rovinato (ora controlla e ricodifica)
+66 Marchio in alto: oggetti grafici non liberati a ogni ridisegno (perdita lenta di risorse GDI)
+67 Aprendo il programma una seconda volta compariva solo un messaggio: ora porta in primo piano la finestra già aperta
+68 Divisione in parti: i marcatori aggiunti dopo la divisione non diventavano capitoli nelle parti successive
+69 Live con disegno GPU e mini-finestra: mancava l'avviso NESSUN SEGNALE
+70 Anteprima sincronizzata: il ritardo dell'immagine restava quello della cattura precedente anche senza audio
+71 Frequenza costante con deinterlacciatura 50/60 e fps decimali (es. 12,5) calcolava una frequenza sbagliata
+72 Post-elaborazione: se il file era aperto in un player, l'errore sui capitoli annullava anche verifica, MD5 e copia
+73 Copia di sicurezza: il file .md5 copiato aveva un nome diverso dal video quando il video veniva rinominato per evitare doppioni
+74 Cambio ora legale (o sincronizzazione dell'orologio) durante una registrazione: contatore REC, 'ferma dopo N minuti', fine nastro, marcatori e timer sbagliati di un'ora
+75 Divisione a 4 GB (chiavette FAT32): il file superava il limite prima di cambiare parte e la registrazione falliva
+76 WAV oltre 4 GB (registrazioni audio lunghe): file illeggibile; ora passa automaticamente a RF64
+77 Canc con più file selezionati spostava nel Cestino solo il primo
+78 Comprimi e Dividi su schermate nere lavoravano solo sul primo dei file selezionati
+79 Più lavori sui file partivano tutti insieme (es. 10 esportazioni = 10 codifiche parallele): PC bloccato
+80 I lavori sui file toglievano CPU alla registrazione in corso (ora a priorità bassa)
+81 Un errore ripetuto (es. durante il ridisegno) apriva una finestra dopo l'altra senza fine
+82 Se la parte precedente non si chiudeva dopo 'Nuovo file', alla chiusura il programma restava nascosto in memoria
+83 Chiudendo durante la post-elaborazione (conversione MP4, verifica, copia su disco esterno) non c'era avviso e la copia restava a metà
+84 Copia su disco esterno/cloud interrotta: restava un file incompleto con il nome definitivo
+85 Cambiando grabber con l'anteprima accesa restavano gli ingressi del dispositivo precedente (possibile errore 'Unable to route')
+86 Premendo Aggiorna con l'anteprima accesa l'anteprima si spegneva e non ripartiva
+87 Aggiornamento automatico con l'avvio alternativo (PowerShell): tentava di sostituire powershell.exe invece di Acquisizione.exe
+88 Avvio alternativo: finestra e area di notifica con l'icona di PowerShell
+89 Live con disegno GPU: a cattura ferma restava l'ultima immagine congelata (sembrava esserci segnale)
+90 Sorgente di prova con microfono attivo: la registrazione falliva (cercava una traccia microfono inesistente)
+91 Microfono o webcam scollegati: l'anteprima del grabber non partiva affatto
+92 Ascolto in bassa latenza: coda audio di soli 40 ms, con crepitii frequenti su molti PC
+93 Fermando l'anteprima mentre partiva un comando dal vivo (timer/scena) il comando di arresto poteva mescolarsi e ffmpeg non si chiudeva subito
+94 Miniature salvate nel profilo roaming di Windows (sincronizzato tra PC): ora nella cartella locale
+95 Dopo la prima notifica ogni avviso della barra di stato diventava anche un fumetto di Windows (notifiche a raffica)
+96 Esporta per WhatsApp: con video lunghi il file superava i 16 MB senza alcun avviso
+97 Ripristino impostazioni: i tasti globali restavano quelli vecchi fino al riavvio
+98 Mini-finestra sempre in primo piano copriva il gioco nel Live a schermo intero sullo stesso monitor
+99 Cartella di registrazione su un disco di rete lento o scollegato: la finestra si bloccava a scatti ogni secondo
+100 Con una scena a schermo pieno (es. 'Torno subito') il rilevamento di fine nastro fermava la registrazione
+
+SECONDO GIRO (70)
+1 Installazione sopra una versione precedente: restavano sorgenti vecchi e l'avvio alternativo non compilava più
+2 Analisi del segnale e prova automatica aspettavano in coda dietro esportazioni lunghe, con l'anteprima ferma
+3 La prova automatica dei formati poteva scartare il formato giusto se il PC era occupato (girava a priorità bassa)
+4 Pausa senza frequenza costante: il file conserva l'intervallo ma i marcatori dopo la pausa venivano anticipati (capitoli sbagliati)
+5 Rapporto di una registrazione solo audio: indicava il codec video invece del formato audio
+6 Rapporto scritto prima della conversione in MP4: indicava il vecchio file .mkv che non esiste più
+7 La procedura guidata ricompariva se il programma si chiudeva in modo anomalo prima dell'uscita normale
+8 Prova automatica: dopo aver trovato il formato l'anteprima che era accesa restava spenta
+9 Cambiando lingua si perdevano le impostazioni ricordate per l'ingresso predefinito e la memoria del driver
+10 Tasto F10 (Stop): dopo averlo premuto Windows attivava il menu della finestra e il tasto seguente andava perso
+11 Interlacciato + uscita 960p/1080p: l'ingrandimento mescolava i campi e rovinava l'immagine in modo permanente
+12 Interlacciato: l'ordine dei campi era sempre 'superiore prima' anche quando l'analisi rilevava il contrario (movimento a scatti)
+13 Deinterlacciatura in diretta sempre con 'campo superiore prima': con segnali al contrario immagine tremolante
+14 Live con disegno GPU: l'opzione 'Scala intera' veniva ignorata
+15 Indirizzo di diretta con '/' finale: la chiave non veniva nascosta nel log
+16 Divisione a tempo (ogni N minuti): MD5, verifica, conversione e copia di sicurezza non venivano fatte su nessun pezzo
+17 Stesso tasto globale su due azioni: il messaggio diceva 'usato da altri programmi' invece di segnalare il doppione
+18 Registrazione programmata durante una registrazione manuale: veniva saltata senza dire nulla
+19 Registrazione programmata non partita (grabber assente): compariva comunque 'avviata'
+20 Registrazione automatica al segnale: diceva 'avviata' anche quando non era partita
+21 Aprendo la mini-finestra con il Live già a schermo intero, la mini copriva il gioco
+22 Spostando il Live sull'altro monitor (tasto M) la mini-finestra poteva finirci sopra
+23 La finestra non ricordava posizione, dimensione e stato ingrandito: si riapriva sempre al centro
+24 Premendo Registra mentre la cattura si riavviava non succedeva nulla e nessun messaggio lo diceva
+25 Errore 'Could not RenderStream' (formato non accettato dal grabber) veniva spiegato come 'grabber occupato'
+26 Risoluzione/fps non accettati dal grabber: l'anteprima non partiva; ora riprova da sola in formato automatico
+27 'Verifica integrità' non veniva fatta sulle registrazioni solo audio
+28 Riducendo a icona la finestra principale spariva anche il Live sul secondo monitor
+29 La mini-finestra spariva riducendo a icona la finestra principale (proprio quando serve)
+30 Proporzioni '4:3 nei metadati': in diretta l'immagine arrivava schiacciata (le piattaforme ignorano i metadati)
+31 Proporzioni nei metadati scritte come 1.33333: i player mostravano rapporti imprecisi; ora 4:3 esatto
+32 Bassa latenza: se il PC rallentava, il ritardo dell'immagine poteva crescere fino a decine di secondi (coda da 1024 fotogrammi)
+33 Ctrl+K (cerca impostazioni) premuto nel Live apriva la ricerca dietro il Live: programma apparentemente bloccato
+34 Rinomina dalla libreria: il file .md5 conservava il vecchio nome e la verifica dell'impronta falliva
+35 Modifica dei metadati: l'impronta .md5 restava quella del file vecchio e risultava sbagliata
+36 Rinomina dalla libreria: il rapporto della registrazione restava con il vecchio nome
+37 Spostando un video nel Cestino restavano orfani i file .md5, marcatori e rapporto
+38 Modello del nome che produce un nome riservato di Windows (es. nastro 'CON' o 'NUL'): la registrazione non partiva
+39 Titolo/nastro molto lunghi nel nome del file: percorso oltre il limite di Windows e registrazione impossibile
+40 Lavori interrotti (taglio intelligente, replay, unione, stabilizzazione) lasciavano file temporanei nella cartella video per sempre
+41 Un errore durante l'avvio chiudeva il programma senza alcun messaggio
+42 Su una cartella di rete 'Sposta nel Cestino' cancellava i file definitivamente senza dirlo
+43 'Apri cartella' apriva sempre la cartella principale anche per file nelle sottocartelle per data
+44 Libreria: per i file FLAC/M4A/OGG/WMA veniva lanciato ffmpeg due volte a ogni aggiornamento (miniatura impossibile)
+45 Libreria: i video senza miniatura possibile (rovinati o senza immagine) venivano rianalizzati a ogni aggiornamento
+46 Registrazione su disco di rete: la lettura della dimensione dei file ogni secondo bloccava la finestra
+47 Dopo una registrazione fermata per dimensione raggiunta, la successiva poteva fermarsi subito (valore vecchio ancora in memoria)
+48 Normalizza audio e Stabilizza eliminavano la traccia del microfono (seconda traccia audio)
+49 Foglio provini con file non video selezionati: non succedeva nulla e nessun messaggio
+50 Cuffie/casse USB collegate dopo l'avvio non comparivano tra le uscite audio fino al riavvio
+51 Prova automatica: con un ingresso specifico provava solo PAL, mai NTSC
+52 Stima dello spazio: non teneva conto dell'audio a 24 bit (WAV/FLAC più grandi del previsto)
+53 Stima dello spazio: non contava la traccia del microfono
+54 I ripieghi automatici (audio a 16 bit, formato automatico, memoria driver disattivata) restavano anche cambiando dispositivo
+55 Attivare l'audio a 24 bit con l'anteprima accesa non riavviava la cattura: i file risultavano a 24 bit ma con audio a 16
+56 Capitoli 'Inizio' e 'Capitolo N' sempre in italiano anche con l'interfaccia in inglese
+57 Chiudendo il Live (disegno GPU) nell'istante in cui arrivava un fotogramma, l'anteprima poteva bloccarsi
+58 Un errore dell'uscita audio (es. cuffie USB scollegate) fermava la lettura dell'audio e rischiava di bloccare registrazione e diretta
+59 Memoria esaurita nel buffer del replay: si fermava tutto il flusso (registrazione e diretta comprese)
+60 Qualsiasi messaggio chiudeva il Live a schermo intero, interrompendo chi stava giocando
+61 Libreria vuota se anche una sola sottocartella per data non era leggibile
+62 Libreria su disco di rete: ogni aggiornamento (dopo ogni lavoro) bloccava la finestra
+63 Scorrendo le impostazioni con la rotellina si cambiavano per sbaglio valori di menu, caselle numeriche e cursori (con riavvio della cattura)
+64 Un valore appena scritto in una casella numerica (es. bitrate) veniva ignorato se si avviava con un tasto rapido senza uscire dalla casella
+65 Con il Live aperto l'anteprima nella finestra principale restava congelata (sembrava un blocco)
+66 Indirizzo di diretta senza chiave: veniva accettato e il server rispondeva con un errore incomprensibile
+67 Seconda destinazione attiva ma con indirizzo vuoto o sbagliato: non partiva e nessuno lo diceva
+68 Disinstallazione: chiudeva di forza il programma anche durante una registrazione, senza chiedere
+69 Con finestra piccola (es. portatile 1366x768) e impostazioni aperte il video restava largo pochi centimetri
+70 Tema scuro: barre di scorrimento di impostazioni e libreria bianche

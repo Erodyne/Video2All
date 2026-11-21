@@ -1,0 +1,5 @@
+Video2All include FFmpeg (https://ffmpeg.org), distribuito con licenza GNU GPL versione 3,
+compilato con librerie GPL tra cui x264 e x265. Il codice sorgente di FFmpeg e delle librerie è
+disponibile su https://ffmpeg.org/download.html e https://github.com/imageio/imageio-binaries.
+Il testo della licenza GPL: https://www.gnu.org/licenses/gpl-3.0.html
+I sorgenti di Video2All sono nella cartella "sorgenti".
